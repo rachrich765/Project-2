@@ -29,7 +29,7 @@ import urllib.request, urllib.parse, urllib.error
 ## find_urls("the internet is awesome #worldwideweb") should return [], empty list
 
 def find_urls(s):
-    return re.findall(r'(https?://[^\s]+\.[^ ]{2,})', s)
+    return re.findall(r'(https?://[^\s]+\.[a-zA-Z]{2,})', s)
 
 
 
@@ -45,7 +45,7 @@ def grab_headlines():
 
     url = 'file:///C:/Users/Rachel/Desktop/Project-2/opinion.html'
     html = urlopen(url, context=ctx).read()
-
+#http://www.michigandaily.com/section/opinion'
 # html.parser is the HTML parser included in the standard Python 3 library.
 # information on other HTML parsers is here:
 # http://www.crummy.com/software/BeautifulSoup/bs4/doc/#installing-a-parser
@@ -57,7 +57,7 @@ def grab_headlines():
             print(x)
 
 
-# <div class="item-list"><ol><li class="first"><a href="https://www.michigandaily.com/section/campus-life/msw-students-protest-staff-members-inappropriate-email">MSW students protest staff member's email based on religious bias</a></li>
+#<ol><li class="first"><a href="https://www.michigandaily.com/section/campus-life/msw-students-protest-staff-members-inappropriate-email">MSW students protest staff member's email based on religious bias</a></li>
 
 ## PART 3 (a) Define a function called get_umsi_data.  It should create a dictionary
 ## saved in a variable umsi_titles whose keys are UMSI people's names, and whose
