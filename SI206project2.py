@@ -39,25 +39,20 @@ def find_urls(s):
 ## http://www.michigandaily.com/section/opinion
 
 def grab_headlines():
+    headline_list = []
     ctx = ssl.create_default_context()
     ctx.check_hostname = False
     ctx.verify_mode = ssl.CERT_NONE
 
-    url = 'file:///C:/Users/Rachel/Desktop/Project-2/opinion.html'
+    url = 'http://www.michigandaily.com/section/opinion'
     html = urlopen(url, context=ctx).read()
-#http://www.michigandaily.com/section/opinion'
-# html.parser is the HTML parser included in the standard Python 3 library.
-# information on other HTML parsers is here:
-# http://www.crummy.com/software/BeautifulSoup/bs4/doc/#installing-a-parser
     soup = BeautifulSoup(html, "html.parser")
-
-# Retrieve all of the anchor tags
-    for headline in soup.find('div', {"class":'item-list'}):
-        for x in soup.find('ol'):
-            print(x)
-
-
-#<ol><li class="first"><a href="https://www.michigandaily.com/section/campus-life/msw-students-protest-staff-members-inappropriate-email">MSW students protest staff member's email based on religious bias</a></li>
+    for div1 in soup.find('div', {"class":'item-list'}):
+        x = soup.find('ol')
+        for y in x.find_all('li'):
+            headline = y.a.text
+            headline_list.append(headline)
+    return headline_list
 
 ## PART 3 (a) Define a function called get_umsi_data.  It should create a dictionary
 ## saved in a variable umsi_titles whose keys are UMSI people's names, and whose
@@ -71,28 +66,43 @@ def grab_headlines():
 ## requests.get(base_url, headers={'User-Agent': 'SI_CLASS'})
 
 def get_umsi_data():
-    # ctx = ssl.create_default_context()
-    # ctx.check_hostname = False
-    # ctx.verify_mode = ssl.CERT_NONE
-    # base_url = 'https://www.si.umich.edu/directory?field_person_firstname_value=&field_person_lastname_value=&rid=All'
-    # r = requests.get(base_url, headers={'User-Agent': 'SI_CLASS'})
-    # soup = BeautifulSoup(r.text, 'html.parser')
-    # for x in soup.find_all('div', {"class": "field-item even"}, property="dc:title"):
-    #     print(x)
-    # for y in soup.find_all('div', {"class": "field-item even"}):
-    #         print(y)
-    #<div class="field-item even">Director of Human Resources and Support Services</div>
     pass
-
-
+    list_umsi_staff = []
+    list_umsi_titles = []
+    ctx = ssl.create_default_context()
+    ctx.check_hostname = False
+    ctx.verify_mode = ssl.CERT_NONE
+    base_url = 'https://www.si.umich.edu/directory?field_person_firstname_value=&field_person_lastname_value=&rid=All'
+    r = requests.get(base_url, headers={'User-Agent': 'SI_CLASS'})
+    soup = BeautifulSoup(r.text, 'html.parser')
+    for i in range(13):
+        new_url = base_url + ("&page=" + str(i).format())
+        r = requests.get(new_url, headers={'User-Agent': 'SI_CLASS'})
+        soup = BeautifulSoup(r.text, 'html.parser')
+        #keys
+        for x in soup.find_all('div', {"class": "field-item even"}, property="dc:title"):
+            y = x.h2.text
+            list_umsi_staff.append(y)
+        #values
+        w = soup.find_all('div', {"class": "field-item even"})
+        for f in w:
+            for g in f:
+                    print(g.encode("ascii"))
+                    #list_umsi_titles.append(g)
+    print(list_umsi_staff)
+    # dict_umsi_staff = dict(zip(list_umsi_staff, list_umsi_titles)
+    # return dict_umsi_staff
 
 ## PART 3 (b) Define a function called num_students.
 ## INPUT: The dictionary from get_umsi_data().
 ## OUTPUT: Return number of PhD students in the data.  (Don't forget, I may change the input data)
 def num_students(data):
     pass
-    #Your code here
-
+    # for k, v in data.items():
+    # count_PhD = 0
+    #     if v == 'PhD student':
+    #         count_phD += 1
+    # return count_phD
 
 
 ########### TESTS; DO NOT CHANGE ANY CODE BELOW THIS LINE! ###########
