@@ -62,7 +62,7 @@ def grab_headlines():
 ## Reminder: you'll need to use the special header for a request to the UMSI site, like so:
 ## requests.get(base_url, headers={'User-Agent': 'SI_CLASS'})
 def get_umsi_data():
-    list_umsi_staff = []
+    list_umsi_names = []
     list_umsi_titles = []
     ctx = ssl.create_default_context()
     ctx.check_hostname = False
@@ -77,14 +77,14 @@ def get_umsi_data():
         #keys
         for div0 in soup.find_all('div', {"class": "field-item even"}, property="dc:title"):
             name = div0.h2.text
-            list_umsi_staff.append(name)
+            list_umsi_names.append(name)
         #values
         for div1 in soup.find_all('div', {"class": "field field-name-field-person-titles field-type-text field-label-hidden"}):
             for div2 in div1.find_all('div', {"class": "field-items"}):
                 for title in div2.find_all('div', {"class": "field-item even"}):
                     list_umsi_titles.append(title.text)
-    dict_umsi_staff = dict(zip(list_umsi_staff, list_umsi_titles))
-    return dict_umsi_staff
+    umsi_titles = dict(zip(list_umsi_names, list_umsi_titles))
+    return umsi_titles
 
 ## PART 3 (b) Define a function called num_students.
 ## INPUT: The dictionary from get_umsi_data().
