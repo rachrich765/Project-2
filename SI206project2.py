@@ -2,8 +2,8 @@
 
 ## COMMENT HERE WITH:
 ## Your name: Rachel Richardson
-## Anyone you worked with on this project:
-
+## Anyone you worked with on this project: N/A
+## link to github repo for project: https://github.com/rachrich765/Project-2
 ## Below we have provided import statements, comments to separate out the
 #parts of the project, instructions/hints/examples, and at the end, TESTS.
 
@@ -31,8 +31,6 @@ import urllib.request, urllib.parse, urllib.error
 def find_urls(s):
     return re.findall(r'(https?://[^\s]+\.[a-zA-Z]{2,})', s)
 
-
-
 ## PART 2  - Define a function grab_headlines.
 ## INPUT: N/A. No input.
 ## Grab the headlines from the "Most Read" section of
@@ -43,14 +41,13 @@ def grab_headlines():
     ctx = ssl.create_default_context()
     ctx.check_hostname = False
     ctx.verify_mode = ssl.CERT_NONE
-
     url = 'http://www.michigandaily.com/section/opinion'
     html = urlopen(url, context=ctx).read()
     soup = BeautifulSoup(html, "html.parser")
     for div1 in soup.find('div', {"class":'item-list'}):
-        x = soup.find('ol')
-        for y in x.find_all('li'):
-            headline = y.a.text
+        ol1 = soup.find('ol')
+        for li1 in ol1.find_all('li'):
+            headline = li1.a.text
             headline_list.append(headline)
     return headline_list
 
@@ -64,9 +61,7 @@ def grab_headlines():
 ## OUTPUT: Return umsi_titles
 ## Reminder: you'll need to use the special header for a request to the UMSI site, like so:
 ## requests.get(base_url, headers={'User-Agent': 'SI_CLASS'})
-
 def get_umsi_data():
-    pass
     list_umsi_staff = []
     list_umsi_titles = []
     ctx = ssl.create_default_context()
@@ -80,30 +75,26 @@ def get_umsi_data():
         r = requests.get(new_url, headers={'User-Agent': 'SI_CLASS'})
         soup = BeautifulSoup(r.text, 'html.parser')
         #keys
-        for x in soup.find_all('div', {"class": "field-item even"}, property="dc:title"):
-            y = x.h2.text
-            list_umsi_staff.append(y)
+        for div0 in soup.find_all('div', {"class": "field-item even"}, property="dc:title"):
+            name = div0.h2.text
+            list_umsi_staff.append(name)
         #values
-        w = soup.find_all('div', {"class": "field-item even"})
-        for f in w:
-            for g in f:
-                    print(g.encode("ascii"))
-                    #list_umsi_titles.append(g)
-    print(list_umsi_staff)
-    # dict_umsi_staff = dict(zip(list_umsi_staff, list_umsi_titles)
-    # return dict_umsi_staff
+        for div1 in soup.find_all('div', {"class": "field field-name-field-person-titles field-type-text field-label-hidden"}):
+            for div2 in div1.find_all('div', {"class": "field-items"}):
+                for title in div2.find_all('div', {"class": "field-item even"}):
+                    list_umsi_titles.append(title.text)
+    dict_umsi_staff = dict(zip(list_umsi_staff, list_umsi_titles))
+    return dict_umsi_staff
 
 ## PART 3 (b) Define a function called num_students.
 ## INPUT: The dictionary from get_umsi_data().
 ## OUTPUT: Return number of PhD students in the data.  (Don't forget, I may change the input data)
 def num_students(data):
-    pass
-    # for k, v in data.items():
-    # count_PhD = 0
-    #     if v == 'PhD student':
-    #         count_phD += 1
-    # return count_phD
-
+    count_PhD = 0
+    for k, v in data.items():
+        if v == 'PhD student':
+            count_PhD += 1
+    return count_PhD
 
 ########### TESTS; DO NOT CHANGE ANY CODE BELOW THIS LINE! ###########
 def test(got, expected, pts):
