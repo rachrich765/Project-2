@@ -29,7 +29,7 @@ import urllib.request, urllib.parse, urllib.error
 ## find_urls("the internet is awesome #worldwideweb") should return [], empty list
 
 def find_urls(s):
-    return re.findall(r'(https?://[^\s]+\.[a-zA-Z]{2,})', s)
+    return re.findall(r'(https?://[^\s]+\.[?\/a-zA-Z0-9]{2,})', s)
 
 ## PART 2  - Define a function grab_headlines.
 ## INPUT: N/A. No input.
