@@ -2,7 +2,7 @@
 
 ## COMMENT HERE WITH:
 ## Your name: Rachel Richardson
-## Anyone you worked with on this project: N/A
+## Anyone you worked with on this project: Sarah Jomaa
 ## link to github repo for project: https://github.com/rachrich765/Project-2
 ## Below we have provided import statements, comments to separate out the
 #parts of the project, instructions/hints/examples, and at the end, TESTS.
@@ -97,6 +97,9 @@ def get_umsi_data():
                 for title in div2.find_all('div', {"class": "field-item even"}):
                     list_umsi_titles.append(title.text)
     umsi_titles = dict(zip(list_umsi_names, list_umsi_titles))
+    print("MY DICT")
+    print(umsi_titles)
+    print("MY DICT")
     return umsi_titles
 
 ## PART 3 (b) Define a function called num_students.
