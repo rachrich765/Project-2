@@ -71,7 +71,7 @@ def get_umsi_data():
     r = requests.get(base_url, headers={'User-Agent': 'SI_CLASS'})
     soup = BeautifulSoup(r.text, 'html.parser')
     for i in range(13):
-        new_url = base_url + ("&page=" + str(i).format())
+        new_url = base_url + ("&page=" + str(i))
         r = requests.get(new_url, headers={'User-Agent': 'SI_CLASS'})
         soup = BeautifulSoup(r.text, 'html.parser')
         #keys
@@ -84,6 +84,8 @@ def get_umsi_data():
                 for title in div2.find_all('div', {"class": "field-item even"}):
                     list_umsi_titles.append(title.text)
     dict_umsi_staff = dict(zip(list_umsi_staff, list_umsi_titles))
+    print(dict_umsi_staff)
+    print(/n"END OF MY DICT"/n)
     return dict_umsi_staff
 
 ## PART 3 (b) Define a function called num_students.
