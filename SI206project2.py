@@ -29,6 +29,8 @@ import urllib.request, urllib.parse, urllib.error
 ## find_urls("the internet is awesome #worldwideweb") should return [], empty list
 
 def find_urls(s):
+    #{2,} matches at least 2 characters after period (.)
+    # +\. makes sure that all periods have at least 2 characters after them
     return re.findall(r'(https?://[^\s]+\.[?\/a-zA-Z0-9]{2,})', s)
 
 ## PART 2  - Define a function grab_headlines.
@@ -38,15 +40,20 @@ def find_urls(s):
 
 def grab_headlines():
     headline_list = []
+    # Ignore SSL certificate errors
     ctx = ssl.create_default_context()
     ctx.check_hostname = False
     ctx.verify_mode = ssl.CERT_NONE
     url = 'http://www.michigandaily.com/section/opinion'
     html = urlopen(url, context=ctx).read()
+    #parse html
     soup = BeautifulSoup(html, "html.parser")
+    #loop through div tags of class item list
     for div1 in soup.find('div', {"class":'item-list'}):
         ol1 = soup.find('ol')
+        #loop through all li tags found within ol tag
         for li1 in ol1.find_all('li'):
+            #get text part of anchor tag
             headline = li1.a.text
             headline_list.append(headline)
     return headline_list
@@ -64,21 +71,27 @@ def grab_headlines():
 def get_umsi_data():
     list_umsi_names = []
     list_umsi_titles = []
+    # Ignore SSL certificate errors
     ctx = ssl.create_default_context()
     ctx.check_hostname = False
     ctx.verify_mode = ssl.CERT_NONE
     base_url = 'https://www.si.umich.edu/directory?field_person_firstname_value=&field_person_lastname_value=&rid=All'
+    #gain access to webpage by making a request
     r = requests.get(base_url, headers={'User-Agent': 'SI_CLASS'})
+    #parse html
     soup = BeautifulSoup(r.text, 'html.parser')
     for i in range(13):
+        #update page number
         new_url = base_url + ("&page=" + str(i))
+        #gain access to webpage by making a request
         r = requests.get(new_url, headers={'User-Agent': 'SI_CLASS'})
+        #parse html
         soup = BeautifulSoup(r.text, 'html.parser')
-        #keys
+        # create keys
         for div0 in soup.find_all('div', {"class": "field-item even"}, property="dc:title"):
             name = div0.h2.text
             list_umsi_names.append(name)
-        #values
+        # create values
         for div1 in soup.find_all('div', {"class": "field field-name-field-person-titles field-type-text field-label-hidden"}):
             for div2 in div1.find_all('div', {"class": "field-items"}):
                 for title in div2.find_all('div', {"class": "field-item even"}):
@@ -91,7 +104,9 @@ def get_umsi_data():
 ## OUTPUT: Return number of PhD students in the data.  (Don't forget, I may change the input data)
 def num_students(data):
     count_PhD = 0
+    #loop through keys and values in dictionary created in 3A
     for k, v in data.items():
+        #checks if value of each key is PhD student or not
         if v == 'PhD student':
             count_PhD += 1
     return count_PhD
